@@ -1,6 +1,8 @@
 
 function plots()
 
+actualDir=pwd() 
+cd(joinpath(actualDir,"output","images"))
 
 
 
@@ -15,7 +17,7 @@ bsample[:mtindex] = 1:size(bsample,1)     # Add an identifier
 datamia=stack(bsample,[2:3])              # Reshape the data so we can use colors!
 
 plot1=plot(datamia,x="A1",y="value",color="variable",Geom.line,Guide.title("Policy Function A1"))
-draw(PNG("output\\images\\policyA1.png", 24cm, 12cm), plot1)
+draw(PNG("policyA1.png", 24cm, 12cm), plot1)
 
 
 
@@ -30,7 +32,9 @@ bsample[:mtindex] = 1:size(bsample,1)     # Add an identifier
 datamia=stack(bsample,[2:3])              # Reshape the data so we can use colors!
 
 plot2=plot(datamia,x="Val",y="value",color="variable",Geom.line,Guide.title("Expected Value Function"))
-draw(PNG("output\\images\\valueFunc.png", 24cm, 12cm), plot2)
+draw(PNG("valueFunc.png", 24cm, 12cm), plot2)
 
  
+cd(actualDir)
+
 end
