@@ -9,3 +9,7 @@ There is a mailing list, please contact [Alexandros Theloudis](mailto:alexandros
 * We will adopt the *fork and pull request* workflow model. You need to have your own copy of this repository (your *fork*), make changes to it, and then request that those changes be pulled into the main repo.
 * [Here](https://help.github.com/articles/fork-a-repo/) is a brief description of the workflow from GitHub.
 
+## Pull Requests
+
+* https://github.com/Kunena/Kunena-Forum/wiki/Create-a-new-branch-with-git-and-manage-branches
+
