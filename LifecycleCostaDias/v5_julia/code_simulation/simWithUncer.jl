@@ -82,27 +82,26 @@ if (uncertaintyMethod == 0)     # we have hardcoded the income process
          ly[1, s] = truncate(logy1[s], -normBnd*sig_inc , normBnd*sig_inc );
          y[1, s] = exp(ly[1, s]);
          for t = 1:1:T                              # loop through time periods for a particular individual               
-             if (t >= Tretire)                      # set income to zero if the individual has retired
+
+            if (t >= Tretire)                      # set income to zero if the individual has retired
                  y[t, s] = 0;
-             end
+            end
+
             if (t < Tretire)                       # first for the before retirement periods
-                #clear tA1 tV;                      # necessary as the dimensions of these change as we wor through this file
+                #clear tA1 tV;                     # necessary as the dimensions of these change as we wor through this file
 
                 tA1  = squeeze(policyA1[t, :, :],1);   # the relevant part of the policy function
-                tV   = squeeze(EV[t, :, :],1);         # the relevant part of the value function                
+                tV   = squeeze(EV[t, :, :],1);         # the relevant part of the value function
 
                 a[t+1, s] = interp2D(Agrid[t,:]', Ygrid[t, :]', tA1, a[t, s], y[t, s]);
                 v[t  , s] = interp2D(Agrid[t,:]', Ygrid[t, :]', tV , a[t, s], y[t, s]);
 
                 if (t != T)  # Get next year's income
-
-
                     ly[t+1, s] = (1 -rho) * mu + rho * ly[t, s] + e[t + 1, s];
                     ly[t+1, s] = truncate(ly[t+1, s], -normBnd*sig_inc,normBnd*sig_inc );
                     y[t+1, s] = exp( ly[t+1, s] );                
                 end # if (t != T)
-             else                          # next for the post retirement periods
-
+            else                          # next for the post retirement periods
                 #clear tA1 tV;                
                 tV  = EV[t, :, 1];         # the relevant part of the value function                
                 tA1 = policyA1[t, :, 1];  # the relevant part of the policy function
@@ -115,13 +114,8 @@ if (uncertaintyMethod == 0)     # we have hardcoded the income process
                 if (t != T)
                     y[t+1, s] = 0;                  
                 end #% if (t ~= T)
-             end #% if (t < Tretire)
-            
-            # Check whether next period's asset is below the lowest
-            # permissable
-           # if ( a[t+1, s] < Agrid[t+1, 1] )
-           #     a[t+1, s]  = checkSimExtrap( Agrid[t+1, 1],y[t, s], t ); 
-           #  end
+            end #% if (t < Tretire)
+
             c[t, s] = a[t, s]  + y[t, s] - (a[t+1, s]/(1+r));
         end   #t      
      end # s

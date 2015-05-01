@@ -1,7 +1,8 @@
+
 # Paul Rodriguez translation into Julia 0.3.5 of Monica Costa Dias and Corma O'Dea "Dynamic Economics in Practice"
 # using Alex code for Getting Equiprobable Shock Points from a Normal Distributions
-# March 2015
-
+# March 2015, p.lesmes.11@ucl.ac.uk
+# Please improve it!
 
 # ------------------------------------------------------------------------
 # DESCRIPTION
@@ -9,6 +10,9 @@
 # problem. There is income that can be uncertain. The income program can be
 # hardcoded by the user or can be set to follow a log normal autoregessive
 # process
+
+# IMPORTANT: Comment lines 188 and 189 if you want to change the number of 
+# periods or use shocks generated in Julia
 
 # ------------------------------------------------------------------------
 # PREAMBLE
@@ -21,35 +25,47 @@ using Optim           # Basic optimization routines
 using Grid            # Interpolation tools
 
 
-# cd("C:\\Dropbox\\Code share\\Dynamic Economics 28-29 October 2013\\final code\\v5_julia")
-pwd()
+# Set here the relevant directory. Please check 
+cd("C://Users//Paul//Documents//GitHub//ucl-econ-julia//LifecycleCostaDias//v5_julia")
+
+# ----------------------------------------------------------------------
+
+mainDir=pwd() 
 
 # Numeric tools
-require("code_numericTools/getEquiprobNormalDeviates.jl")
-require("code_numericTools/truncate.jl")
-require("code_numericTools/interp1lin.jl")
-
-require("code_numericTools/interp2D.jl")
+cd("code_numericTools")
+require("getEquiprobNormalDeviates.jl")
+require("truncate.jl")
+require("interp1lin.jl")
+require("interp2D.jl") 
+cd(mainDir)
 
 # Grids and other inputs
-require("code_gridsInputs/checkInputs.jl")
-require("code_gridsInputs/getIncomeGrid.jl")
-require("code_gridsInputs/getMinandMaxAss.jl")
-require("code_gridsInputs/getGrid.jl")
+cd("code_gridsInputs")
+require("checkInputs.jl")
+require("getIncomeGrid.jl")
+require("getMinandMaxAss.jl")
+require("getGrid.jl")
+cd(mainDir)
 
 # Programs for the solution
-require("code_solution/solveValueFunction.jl")
-require("code_solution/objectivefunc.jl")
-require("code_solution/utility.jl")
+cd("code_solution")
+require("solveValueFunction.jl")
+require("objectivefunc.jl")
+require("utility.jl")
+cd(mainDir)
 
 # Programs for the simulation
-require("code_simulation/simNoUncer.jl")
-require("code_simulation/simWithUncer.jl")
+cd("code_simulation")
+require("simNoUncer.jl")
+require("simWithUncer.jl")
+cd(mainDir)
 
 # Plot stuff
-require("code_plots/plotPaths.jl")
-require("code_plots/plots.jl")
-
+cd("code_plots")
+require("plotPaths.jl")
+require("plots.jl")
+cd(mainDir)
 
 tic()        # start the clock
 
@@ -89,7 +105,7 @@ const numSims = 2;                #How many individuals to simulate
 # THE ECONOMIC ENVIRONMENT
 # Set values of structural economic parameters
 
-const T = 40;                      # Number of time period
+const T = 40;                      # Number of time period (If you want to reproduce matlab results, be sure that it has the same number of periods!)
 const r = 0.01;                    # Interest rate
 const beta = 0.98;                 # Discount factor
 const gamma = 1.5;                 # Coefficient of relative risk aversion
@@ -168,8 +184,10 @@ else
  	sig_inc = sigma/ ((1-rho^2)^0.5);
  	logy1   =rand(Normal(mu, sig_inc),numSims);  # a random draw for the initial income
 
-		# Want to compare with Matlab version? In that way you can test how different are
-		# simulations using the same shocks
+		# IMPORTANT: Want to compare with Matlab version? In that way you can test how different are
+		# simulations using the same shocks. NOTICE THAT THIS OVERIDES THE GENERATED SHOCKS FROM
+		# THE PREVIOUS LINES
+		# Comment this lines if you want to change the number of periods
  		e      = readdlm("matlablObj\\ematlab.csv", ',' );
  		logy1  = readdlm("matlablObj\\logy1matlab.csv", ',' );
 
@@ -185,16 +203,6 @@ toc();     # Stop the clock
 # Use a program that supports Gadfly, in these days, either JUNO, IJULIA
 
 if 1==1  # In purspouse, Gadfly is just so slow!! But there are few good alternatives (March 2015)
-	# Cheap and fast Graphics!
-	# using TextPlots
-
-	# println("Income Path")
-	# 	plot(ypath[:,1])
-	# println("Consumption Path")
-	# plot(cpath[:,1])
-	# println("Assets Path")
-	# 	plot(apath[:,1])
-
 
 	# Slow.........
 	using Gadfly

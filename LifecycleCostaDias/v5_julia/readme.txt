@@ -18,4 +18,5 @@ impossible condition (1==0) that you need to deactivate if you want to generate 
 Alternatively, you can use the notebook for IJulia (Graphs Main5.ipynb) with some interactive features
 
 Paul
+p.lesmes.11@ucl.ac.uk
 
